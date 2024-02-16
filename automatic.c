@@ -20,6 +20,24 @@ struct mi_dispositivo {
 // Definir el puntero al dispositivo
 static struct mi_dispositivo *mi_dispositivo_ptr;
 
+// Función principal del módulo (NIMO1)
+static void mi_modulo_funcion(void) {
+  // Implementar la tarea principal del módulo
+  while (true) {
+    // Leer datos de sensores
+    ...
+
+    // Controlar dispositivos
+    ...
+
+    // Realizar cálculos complejos
+    ...
+
+    // Dormir durante un tiempo para evitar un bucle infinito
+    msleep(100);
+  }
+}
+
 int establecer_comunicacion_con_otros_dispositivos(void) {
   // Definir la clave IPC
   key_t key = IPC_KEY;
@@ -81,13 +99,7 @@ static int __init mi_modulo_init(void) {
     return err;
   }
 
-  // Establecer comunicación con otros dispositivos
-  err = establecer_comunicacion_con_otros_dispositivos();
-
-  if (err < 0) {
-    printk(KERN_ERR "Error al establecer comunicacion con otros dispositivos.");
-    return err;
-  }
+  mi_modulo_funcion();
   
   return 0;
 }
