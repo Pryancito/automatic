@@ -109,7 +109,20 @@ static void __exit mi_modulo_exit(void) {
   printk(KERN_INFO "Mi módulo (%s) se ha descargado correctamente.\n", module_name);
 
   // Desconexión de otros dispositivos
-  ... (utilizar algoritmo IPC2)
+  // Definir la clave IPC
+  key_t key = IPC_KEY;
+
+  // Eliminar la cola de mensajes
+  msgctl(mi_dispositivo_ptr->msg_queue_id, IPC_RMID, NULL);
+
+  // Enviar un mensaje de "desconexión" a la cola de mensajes
+  struct my_message msg;
+  msg.type = MSG_TYPE_DISCONNECT;
+  msg.data = 0;
+  int err = msgsnd(key, &msg, sizeof(msg), IPC_NOWAIT);
+  if (err < 0) {
+    printk(KERN_ERR "Error al enviar el mensaje de desconexión: %d\n", err);
+  }
 
   // Liberar recursos del módulo
   cdev_del(&mi_dispositivo_ptr->cdev);
